@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Financeiro.Business/Financeiro.Business.csproj" />
+  <Project Path="Financeiro.Data/Financeiro.Data.csproj" />
+  <Project Path="WebApplication2/WebApplication2.csproj" />
+</Solution>
