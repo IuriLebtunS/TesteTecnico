@@ -1,23 +1,17 @@
-﻿using System;
+﻿using System.Configuration;
 using System.Data.SqlClient;
 
 namespace Financeiro.Data.Infra
 {
     public static class DbConnectionFactory
     {
-        private static string _connectionString;
-
-        public static void Configure(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
-
         public static SqlConnection Create()
         {
-            if (string.IsNullOrWhiteSpace(_connectionString))
-                throw new Exception("ConnectionString não configurada. Chame DbConnectionFactory.Configure().");
+            var cs = ConfigurationManager
+                .ConnectionStrings["FinanceiroDb"]
+                .ConnectionString;
 
-            return new SqlConnection(_connectionString);
+            return new SqlConnection(cs);
         }
     }
 }
