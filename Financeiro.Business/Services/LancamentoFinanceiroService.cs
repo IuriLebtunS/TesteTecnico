@@ -14,76 +14,76 @@ namespace Financeiro.Business.Services
             _repository = repository;
         }
 
-        public void Validar(LancamentoFinanceiro l)
+        public void Validar(LancamentoFinanceiro lancamento)
         {
-            if (string.IsNullOrWhiteSpace(l.Descricao))
+            if (string.IsNullOrWhiteSpace(lancamento.Descricao))
                 throw new Exception("Descrição obrigatória");
 
-            if (l.ValorOriginal <= 0)
+            if (lancamento.ValorOriginal <= 0)
                 throw new Exception("Valor deve ser maior que zero");
 
-            if (string.IsNullOrWhiteSpace(l.Competencia))
+            if (string.IsNullOrWhiteSpace(lancamento.Competencia))
                 throw new Exception("Competência obrigatória");
 
-            if (l.Tipo == TipoLancamento.Debito)
+            if (lancamento.Tipo == TipoLancamento.Debito)
             {
-                if (l.PercentualTaxa <= 0)
+                if (lancamento.PercentualTaxa <= 0)
                     throw new Exception("Débito exige taxa");
 
-                if (l.PercentualDesconto > 0)
+                if (lancamento.PercentualDesconto > 0)
                     throw new Exception("Débito não pode ter desconto");
             }
 
-            if (l.Tipo == TipoLancamento.Credito)
+            if (lancamento.Tipo == TipoLancamento.Credito)
             {
-                if (l.PercentualDesconto <= 0)
+                if (lancamento.PercentualDesconto <= 0)
                     throw new Exception("Crédito exige desconto");
 
-                if (l.PercentualTaxa > 0)
+                if (lancamento.PercentualTaxa > 0)
                     throw new Exception("Crédito não pode ter taxa");
             }
         }
 
-        public decimal CalcularValor(LancamentoFinanceiro l)
+        public decimal CalcularValor(LancamentoFinanceiro lancamento)
         {
-            if (l.Tipo == TipoLancamento.Debito)
+            if (lancamento.Tipo == TipoLancamento.Debito)
             {
-                return l.ValorOriginal + (l.ValorOriginal * (l.PercentualTaxa / 100));
+                return lancamento.ValorOriginal + (lancamento.ValorOriginal * (lancamento.PercentualTaxa / 100));
             }
 
-            if (l.Tipo == TipoLancamento.Credito)
+            if (lancamento.Tipo == TipoLancamento.Credito)
             {
-                return l.ValorOriginal - (l.ValorOriginal * (l.PercentualDesconto / 100));
+                return lancamento.ValorOriginal - (lancamento.ValorOriginal * (lancamento.PercentualDesconto / 100));
             }
 
-            return l.ValorOriginal;
+            return lancamento.ValorOriginal;
         }
 
-        public void Criar(LancamentoFinanceiro l)
+        public void Criar(LancamentoFinanceiro lancamento)
         {
-            Validar(l);
+            Validar(lancamento);
 
-            bool existe = _repository.ExisteDuplicado(l.Competencia, l.Descricao, l.Tipo);
+            bool existe = _repository.ExisteDuplicado(lancamento.Competencia, lancamento.Descricao, lancamento.Tipo);
             if (existe)
                 throw new Exception("Lançamento duplicado");
 
-            l.ValorCalculado = CalcularValor(l);
-            l.DataCriacao = DateTime.Now;
-            l.Status = StatusLancamento.Aberto;
+            lancamento.ValorCalculado = CalcularValor(lancamento);
+            lancamento.DataCriacao = DateTime.Now;
+            lancamento.Status = StatusLancamento.Aberto;
 
-            _repository.Inserir(l);
+            _repository.Inserir(lancamento);
         }
 
-        public void Editar(LancamentoFinanceiro l)
+        public void Editar(LancamentoFinanceiro lancamento)
         {
-            if (l.Status != StatusLancamento.Aberto)
+            if (lancamento.Status != StatusLancamento.Aberto)
                 throw new Exception("Somente lançamentos em aberto podem ser editados");
 
-            Validar(l);
+            Validar(lancamento);
 
-            l.ValorCalculado = CalcularValor(l);
+            lancamento.ValorCalculado = CalcularValor(lancamento);
 
-            _repository.Atualizar(l);
+            _repository.Atualizar(lancamento);
         }
 
         public void Pagar(int id)
@@ -101,12 +101,12 @@ namespace Financeiro.Business.Services
             var pagos = _repository.ListarPagos();
             decimal saldo = 0;
 
-            foreach (var l in pagos)
+            foreach (var lancamento in pagos)
             {
-                if (l.Tipo == TipoLancamento.Credito)
-                    saldo += l.ValorCalculado;
+                if (lancamento.Tipo == TipoLancamento.Credito)
+                    saldo += lancamento.ValorCalculado;
                 else
-                    saldo -= l.ValorCalculado;
+                    saldo -= lancamento.ValorCalculado;
             }
 
             return saldo;

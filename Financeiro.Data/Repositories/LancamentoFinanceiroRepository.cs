@@ -1,15 +1,15 @@
-﻿using Financeiro.Business.Interfaces;
-using Financeiro.Business.Entities;
+﻿using Financeiro.Business.Entities;
+using Financeiro.Business.Interfaces;
+using Financeiro.Data.Infra;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Financeiro.Data.Infra;    
 using System;
 
 namespace Financeiro.Data.Repositories
 {
     public class LancamentoFinanceiroRepository : ILancamentoFinanceiroRepository
     {
-        public void Inserir(LancamentoFinanceiro l)
+        public void Inserir(LancamentoFinanceiro lancamento)
         {
             using (var con = DbConnectionFactory.Create())
             {
@@ -23,22 +23,22 @@ namespace Financeiro.Data.Repositories
                 (@Descricao,@Tipo,@ValorOriginal,@PercentualTaxa,@PercentualDesconto,@ValorCalculado,
                  @DataLancamento,@DataCriacao,@Competencia,@Status)", con);
 
-                cmd.Parameters.AddWithValue("@Descricao", l.Descricao);
-                cmd.Parameters.AddWithValue("@Tipo", (int)l.Tipo);
-                cmd.Parameters.AddWithValue("@ValorOriginal", l.ValorOriginal);
-                cmd.Parameters.AddWithValue("@PercentualTaxa", l.PercentualTaxa);
-                cmd.Parameters.AddWithValue("@PercentualDesconto", l.PercentualDesconto);
-                cmd.Parameters.AddWithValue("@ValorCalculado", l.ValorCalculado);
-                cmd.Parameters.AddWithValue("@DataLancamento", l.DataLancamento);
-                cmd.Parameters.AddWithValue("@DataCriacao", l.DataCriacao);
-                cmd.Parameters.AddWithValue("@Competencia", l.Competencia);
-                cmd.Parameters.AddWithValue("@Status", (int)l.Status);
+                cmd.Parameters.AddWithValue("@Descricao", lancamento.Descricao);
+                cmd.Parameters.AddWithValue("@Tipo", (int)lancamento.Tipo);
+                cmd.Parameters.AddWithValue("@ValorOriginal", lancamento.ValorOriginal);
+                cmd.Parameters.AddWithValue("@PercentualTaxa", lancamento.PercentualTaxa);
+                cmd.Parameters.AddWithValue("@PercentualDesconto", lancamento.PercentualDesconto);
+                cmd.Parameters.AddWithValue("@ValorCalculado", lancamento.ValorCalculado);
+                cmd.Parameters.AddWithValue("@DataLancamento", lancamento.DataLancamento);
+                cmd.Parameters.AddWithValue("@DataCriacao", lancamento.DataCriacao);
+                cmd.Parameters.AddWithValue("@Competencia", lancamento.Competencia);
+                cmd.Parameters.AddWithValue("@Status", (int)lancamento.Status);
 
                 cmd.ExecuteNonQuery();
             }
         }
 
-        public void Atualizar(LancamentoFinanceiro l)
+        public void Atualizar(LancamentoFinanceiro lancamento)
         {
             using (var con = DbConnectionFactory.Create())
             {
@@ -56,15 +56,15 @@ namespace Financeiro.Data.Repositories
                 Competencia=@Competencia
                 WHERE Id=@Id AND Status=@Status", con);
 
-                cmd.Parameters.AddWithValue("@Descricao", l.Descricao);
-                cmd.Parameters.AddWithValue("@Tipo", (int)l.Tipo);
-                cmd.Parameters.AddWithValue("@ValorOriginal", l.ValorOriginal);
-                cmd.Parameters.AddWithValue("@PercentualTaxa", l.PercentualTaxa);
-                cmd.Parameters.AddWithValue("@PercentualDesconto", l.PercentualDesconto);
-                cmd.Parameters.AddWithValue("@ValorCalculado", l.ValorCalculado);
-                cmd.Parameters.AddWithValue("@DataLancamento", l.DataLancamento);
-                cmd.Parameters.AddWithValue("@Competencia", l.Competencia);
-                cmd.Parameters.AddWithValue("@Id", l.Id);
+                cmd.Parameters.AddWithValue("@Descricao", lancamento.Descricao);
+                cmd.Parameters.AddWithValue("@Tipo", (int)lancamento.Tipo);
+                cmd.Parameters.AddWithValue("@ValorOriginal", lancamento.ValorOriginal);
+                cmd.Parameters.AddWithValue("@PercentualTaxa", lancamento.PercentualTaxa);
+                cmd.Parameters.AddWithValue("@PercentualDesconto", lancamento.PercentualDesconto);
+                cmd.Parameters.AddWithValue("@ValorCalculado", lancamento.ValorCalculado);
+                cmd.Parameters.AddWithValue("@DataLancamento", lancamento.DataLancamento);
+                cmd.Parameters.AddWithValue("@Competencia", lancamento.Competencia);
+                cmd.Parameters.AddWithValue("@Id", lancamento.Id);
                 cmd.Parameters.AddWithValue("@Status", (int)StatusLancamento.Aberto);
 
                 cmd.ExecuteNonQuery();
