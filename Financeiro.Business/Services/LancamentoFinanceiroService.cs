@@ -91,9 +91,9 @@ namespace Financeiro.Business.Services
             lancamentoAtual.Tipo = lancamentoEditado.Tipo;
             lancamentoAtual.Competencia = lancamentoEditado.Competencia;
 
-            Validar(lancamentoAtual);
-
             lancamentoAtual.ValorCalculado = CalcularValor(lancamentoAtual);
+
+            Validar(lancamentoAtual);
 
             _repositorio.Atualizar(lancamentoAtual);
         }
@@ -102,21 +102,32 @@ namespace Financeiro.Business.Services
         {
             var lancamento = _repositorio.ObterPorId(id);
 
+            if (lancamento == null)
+                throw new Exception("Lançamento não encontrado.");
+
             if (lancamento.Status != StatusLancamento.Aberto)
                 throw new Exception("Somente lançamentos em aberto podem ser pagos.");
 
             _repositorio.AtualizarStatus(id, StatusLancamento.Pago, DateTime.Now);
         }
 
+
         public void Cancelar(int id)
         {
             var lancamento = _repositorio.ObterPorId(id);
 
+            if (lancamento == null)
+                throw new Exception("Lançamento não encontrado.");
+
             if (lancamento.Status != StatusLancamento.Aberto)
                 throw new Exception("Somente lançamentos em aberto podem ser cancelados.");
 
-            _repositorio.AtualizarStatus(id, StatusLancamento.Cancelado, DateTime.Now);
+            lancamento.Status = StatusLancamento.Cancelado;
+            lancamento.DataCancelamento = DateTime.Now;
+
+            _repositorio.Atualizar(lancamento);
         }
+
         public decimal CalcularSaldo()
         {
             var lancamentos = _repositorio.Listar();

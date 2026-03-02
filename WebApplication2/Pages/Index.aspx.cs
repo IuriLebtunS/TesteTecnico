@@ -28,23 +28,33 @@ namespace Financeiro.WebApp.Pages
 
         protected void GridLancamentos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            if (e.CommandName != "Editar" &&
+                e.CommandName != "Pagar" &&
+                e.CommandName != "Cancelar")
+                return;
+
+            if (string.IsNullOrEmpty(e.CommandArgument?.ToString()))
+                return;
+
             int id = Convert.ToInt32(e.CommandArgument);
 
             var service = new LancamentoFinanceiroService(_repositorio);
 
-            if (e.CommandName == "Editar")
-                Response.Redirect($"~/Pages/Editar.aspx?id={id}");
-
-            if (e.CommandName == "Pagar")
+            switch (e.CommandName)
             {
-                service.Pagar(id);
-                Carregar();
-            }
+                case "Editar":
+                    Response.Redirect($"~/Pages/Editar.aspx?id={id}");
+                    break;
 
-            if (e.CommandName == "Cancelar")
-            {
-                service.Cancelar(id);
-                Carregar();
+                case "Pagar":
+                    service.Pagar(id);
+                    Carregar();
+                    break;
+
+                case "Cancelar":
+                    service.Cancelar(id);
+                    Carregar();
+                    break;
             }
         }
     }

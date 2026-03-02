@@ -92,6 +92,8 @@ namespace Financeiro.Data.Repositories
             }
         }
 
+  
+
         public List<LancamentoFinanceiro> Listar()
         {
             var lista = new List<LancamentoFinanceiro>();
