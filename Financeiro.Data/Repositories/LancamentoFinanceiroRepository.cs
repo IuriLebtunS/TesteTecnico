@@ -1,7 +1,7 @@
 ﻿using Financeiro.Business.Entities;
 using Financeiro.Business.Interfaces;
 using Financeiro.Data.Infra;
-using System.Collections.Generic;
+using System.Collections.Generic;   // ← OBRIGATÓRIO
 using System.Data.SqlClient;
 using System;
 
@@ -171,6 +171,28 @@ namespace Financeiro.Data.Repositories
                 Competencia = dr["Competencia"].ToString(),
                 Status = (StatusLancamento)Convert.ToInt32(dr["Status"])
             };
+        }
+        public LancamentoFinanceiro ObterPorId(int id)
+        {
+            using (var con = DbConnectionFactory.Create())
+            {
+                con.Open();
+
+                var cmd = new SqlCommand(
+                    "SELECT * FROM LancamentoFinanceiro WHERE Id = @Id",
+                    con);
+
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                var dr = cmd.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    return Map(dr);
+                }
+            }
+
+            return null;
         }
     }
 }

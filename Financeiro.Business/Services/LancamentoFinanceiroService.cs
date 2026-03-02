@@ -7,11 +7,11 @@ namespace Financeiro.Business.Services
 
     public class LancamentoFinanceiroService
     {
-        private readonly ILancamentoFinanceiroRepository _repository;
+        private readonly ILancamentoFinanceiroRepository _repositorio;
 
         public LancamentoFinanceiroService(ILancamentoFinanceiroRepository repository)
         {
-            _repository = repository;
+            _repositorio = repository;
         }
 
         public void Validar(LancamentoFinanceiro lancamento)
@@ -63,7 +63,7 @@ namespace Financeiro.Business.Services
         {
             Validar(lancamento);
 
-            bool existe = _repository.ExisteDuplicado(lancamento.Competencia, lancamento.Descricao, lancamento.Tipo);
+            bool existe = _repositorio.ExisteDuplicado(lancamento.Competencia, lancamento.Descricao, lancamento.Tipo);
             if (existe)
                 throw new Exception("Lançamento duplicado");
 
@@ -71,42 +71,67 @@ namespace Financeiro.Business.Services
             lancamento.DataCriacao = DateTime.Now;
             lancamento.Status = StatusLancamento.Aberto;
 
-            _repository.Inserir(lancamento);
+            _repositorio.Inserir(lancamento);
         }
 
-        public void Editar(LancamentoFinanceiro lancamento)
+        public void Editar(LancamentoFinanceiro lancamentoEditado)
         {
-            if (lancamento.Status != StatusLancamento.Aberto)
-                throw new Exception("Somente lançamentos em aberto podem ser editados");
+            var lancamentoAtual = _repositorio.ObterPorId(lancamentoEditado.Id);
 
-            Validar(lancamento);
+            if (lancamentoAtual == null)
+                throw new Exception("Lançamento não encontrado.");
 
-            lancamento.ValorCalculado = CalcularValor(lancamento);
+            if (lancamentoAtual.Status != StatusLancamento.Aberto)
+                throw new Exception("Somente lançamentos em aberto podem ser editados.");
 
-            _repository.Atualizar(lancamento);
+            lancamentoAtual.Descricao = lancamentoEditado.Descricao;
+            lancamentoAtual.ValorOriginal = lancamentoEditado.ValorOriginal;
+            lancamentoAtual.PercentualTaxa = lancamentoEditado.PercentualTaxa;
+            lancamentoAtual.PercentualDesconto = lancamentoEditado.PercentualDesconto;
+            lancamentoAtual.Tipo = lancamentoEditado.Tipo;
+            lancamentoAtual.Competencia = lancamentoEditado.Competencia;
+
+            Validar(lancamentoAtual);
+
+            lancamentoAtual.ValorCalculado = CalcularValor(lancamentoAtual);
+
+            _repositorio.Atualizar(lancamentoAtual);
         }
 
         public void Pagar(int id)
         {
-            _repository.AtualizarStatus(id, StatusLancamento.Pago, DateTime.Now);
+            var lancamento = _repositorio.ObterPorId(id);
+
+            if (lancamento.Status != StatusLancamento.Aberto)
+                throw new Exception("Somente lançamentos em aberto podem ser pagos.");
+
+            _repositorio.AtualizarStatus(id, StatusLancamento.Pago, DateTime.Now);
         }
 
         public void Cancelar(int id)
         {
-            _repository.AtualizarStatus(id, StatusLancamento.Cancelado, DateTime.Now);
-        }
+            var lancamento = _repositorio.ObterPorId(id);
 
+            if (lancamento.Status != StatusLancamento.Aberto)
+                throw new Exception("Somente lançamentos em aberto podem ser cancelados.");
+
+            _repositorio.AtualizarStatus(id, StatusLancamento.Cancelado, DateTime.Now);
+        }
         public decimal CalcularSaldo()
         {
-            var pagos = _repository.ListarPagos();
+            var lancamentos = _repositorio.Listar();
+
             decimal saldo = 0;
 
-            foreach (var lancamento in pagos)
+            foreach (var lancamento in lancamentos)
             {
-                if (lancamento.Tipo == TipoLancamento.Credito)
-                    saldo += lancamento.ValorCalculado;
-                else
-                    saldo -= lancamento.ValorCalculado;
+                if (lancamento.Status == StatusLancamento.Pago)
+                {
+                    if (lancamento.Tipo == TipoLancamento.Credito)
+                        saldo += lancamento.ValorCalculado;
+                    else
+                        saldo -= lancamento.ValorCalculado;
+                }
             }
 
             return saldo;

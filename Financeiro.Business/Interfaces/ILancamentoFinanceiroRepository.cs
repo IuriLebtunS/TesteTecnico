@@ -12,5 +12,6 @@ namespace Financeiro.Business.Interfaces
         bool ExisteDuplicado(string competencia, string descricao, TipoLancamento tipo);
         List<LancamentoFinanceiro> Listar();
         List<LancamentoFinanceiro> ListarPagos();
+        LancamentoFinanceiro ObterPorId(int id);
     }
 }
