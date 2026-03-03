@@ -71,7 +71,7 @@ namespace Financeiro.WebApp.Pages
 
                 worksheet.Cell(1, 1).Value = "Descrição";
                 worksheet.Cell(1, 2).Value = "Valor";
-                worksheet.Cell(1, 3).Value = "Competência";
+                worksheet.Cell(1, 3).Value = "Data";
                 worksheet.Cell(1, 4).Value = "Tipo";
                 worksheet.Cell(1, 5).Value = "Taxa";
                 worksheet.Cell(1, 6).Value = "Desconto";

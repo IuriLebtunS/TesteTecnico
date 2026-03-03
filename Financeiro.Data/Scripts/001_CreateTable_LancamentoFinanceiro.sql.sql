@@ -7,9 +7,7 @@ CREATE TABLE LancamentoFinanceiro (
     Descricao NVARCHAR(200) NOT NULL,
 
     Tipo INT NOT NULL,
-    -- 1 = Crédito
-    -- 2 = Débito
-
+ 
     ValorOriginal DECIMAL(18,2) NOT NULL,
 
     PercentualTaxa DECIMAL(5,2) NOT NULL DEFAULT 0,
@@ -22,14 +20,11 @@ CREATE TABLE LancamentoFinanceiro (
     DataPagamento DATETIME NULL,
     DataCancelamento DATETIME NULL,
 
-    Competencia CHAR(7) NOT NULL, -- MM/YYYY
+    Competencia CHAR(7) NOT NULL,
 
     Status INT NOT NULL
-    -- 1 = Aberto
-    -- 2 = Pago
-    -- 3 = Cancelado
+    
 );
 
--- Regra de duplicidade
 CREATE UNIQUE INDEX UX_Lancamento_Unico
 ON LancamentoFinanceiro (Competencia, Descricao, Tipo);

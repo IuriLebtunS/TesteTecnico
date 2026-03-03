@@ -1,5 +1,5 @@
-﻿using System.Configuration;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
+using System.Configuration;
 
 namespace Financeiro.Data.Infra
 {

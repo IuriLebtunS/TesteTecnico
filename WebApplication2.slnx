@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path=".gitignore" />
+  </Folder>
   <Project Path="Financeiro.Business/Financeiro.Business.csproj" Id="b61e4905-828d-47c8-8ce0-27fcc817a00a" />
   <Project Path="Financeiro.Data/Financeiro.Data.csproj" Id="cdb40a0c-d0f0-4688-b45e-52e6616f1aa5" />
   <Project Path="WebApplication2/Financeiro.WebApp.csproj" Id="98ee3e1c-a3b9-4be0-9200-d9f7952080cc" />
