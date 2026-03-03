@@ -17,5 +17,19 @@ namespace Financeiro.Business.Entities
         public DateTime? DataCancelamento { get; set; }
         public string Competencia { get; set; }
         public StatusLancamento Status { get; set; }
+
+        public DateTime? DataUltimaAcao
+        {
+            get
+            {
+                if (Status == StatusLancamento.Pago)
+                    return DataPagamento;
+
+                if (Status == StatusLancamento.Cancelado)
+                    return DataCancelamento;
+
+                return DataCriacao;
+            }
+        }
     }
 }
