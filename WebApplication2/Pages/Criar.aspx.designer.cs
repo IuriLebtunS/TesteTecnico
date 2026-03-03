@@ -42,13 +42,13 @@ namespace Financeiro.WebApp.Pages
         protected global::System.Web.UI.WebControls.TextBox TxtValor;
 
         /// <summary>
-        /// Controle TxtDataLancamento.
+        /// Controle TxtCompetencia.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TxtDataLancamento;
+        protected global::System.Web.UI.WebControls.TextBox TxtCompetencia;
 
         /// <summary>
         /// Controle SelectTipo.

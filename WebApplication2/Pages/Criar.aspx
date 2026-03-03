@@ -41,12 +41,12 @@
             <div class="row">
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Data do Lançamento</label>
+                    <label class="form-label">Data</label>
                     <asp:TextBox
-                        ID="TxtDataLancamento"
+                        ID="TxtCompetencia"
                         runat="server"
                         CssClass="form-control"
-                        TextMode="Date" />
+                        Placeholder="MM/AAAA" />
                 </div>
 
                 <div class="col-md-6 mb-3">

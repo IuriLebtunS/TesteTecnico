@@ -1,8 +1,7 @@
-﻿using Financeiro.Business.Entities;
-using Financeiro.Business.Services;
-using Financeiro.Data.Repositories;
+﻿using System.Web.UI;
 using System;
-using System.Web.UI;
+using Financeiro.Business.Entities;
+using Financeiro.Data.Repositories;
 
 
 namespace Financeiro.WebApp.Pages
@@ -11,18 +10,14 @@ namespace Financeiro.WebApp.Pages
     {
         protected void BtnSalvar_Click(object sender, EventArgs e)
         {
-            var dataLancamento = DateTime.Parse(TxtDataLancamento.Text);
-
             var model = new LancamentoFinanceiro
             {
                 Descricao = TxtDescricao.Text,
                 ValorOriginal = decimal.Parse(TxtValor.Text),
                 Tipo = (TipoLancamento)int.Parse(SelectTipo.SelectedValue),
-
-                DataLancamento = dataLancamento,
+                Competencia = TxtCompetencia.Text,
+                DataLancamento = DateTime.Now,
                 DataCriacao = DateTime.Now,
-                Competencia = dataLancamento.ToString("MM/yyyy"),
-
                 Status = StatusLancamento.Aberto,
                 PercentualTaxa = 0,
                 PercentualDesconto = 0,
@@ -30,7 +25,8 @@ namespace Financeiro.WebApp.Pages
             };
 
             var repo = new LancamentoFinanceiroRepository();
-            var service = new LancamentoFinanceiroService(repo);
+            repo.Inserir(model);
+
             Response.Redirect("Index.aspx");
         }
     }
