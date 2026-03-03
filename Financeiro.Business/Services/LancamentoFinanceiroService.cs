@@ -111,7 +111,6 @@ namespace Financeiro.Business.Services
             _repositorio.AtualizarStatus(id, StatusLancamento.Pago, DateTime.Now);
         }
 
-
         public void Cancelar(int id)
         {
             var lancamento = _repositorio.ObterPorId(id);
@@ -122,10 +121,7 @@ namespace Financeiro.Business.Services
             if (lancamento.Status != StatusLancamento.Aberto)
                 throw new Exception("Somente lançamentos em aberto podem ser cancelados.");
 
-            lancamento.Status = StatusLancamento.Cancelado;
-            lancamento.DataCancelamento = DateTime.Now;
-
-            _repositorio.Atualizar(lancamento);
+            _repositorio.AtualizarStatus(id, StatusLancamento.Cancelado, DateTime.Now);
         }
 
         public decimal CalcularSaldo()

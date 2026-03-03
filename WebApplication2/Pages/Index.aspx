@@ -6,12 +6,22 @@
 
     <h2>Lançamentos Financeiros</h2>
 
+
     <div class="d-flex justify-content-end mb-3">
-        <asp:Button ID="BtnNovo"
+        <asp:Button
+            ID="BtnExcel"
+            runat="server"
+            Text="Exportar para Excel"
+            CssClass="btn btn-success"
+            OnClick="BtnExcel_Click "
+            Style="margin-right: 10px;" />
+
+        <asp:Button
+            ID="BtnNovo"
             runat="server"
             Text="Novo Lançamento"
             PostBackUrl="~/Pages/Criar.aspx"
-            CssClass="btn btn-success" />
+            CssClass="btn btn-primary" />
     </div>
 
     <div class="alert alert-info">
