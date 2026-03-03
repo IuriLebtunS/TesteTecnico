@@ -1,8 +1,8 @@
-﻿using Financeiro.Business.Entities;
-using Financeiro.Business.Interfaces;
-using Financeiro.Data.Infra;
-using System.Collections.Generic;   // ← OBRIGATÓRIO
+﻿using Financeiro.Business.Interfaces;
+using Financeiro.Business.Entities;
+using System.Collections.Generic;  
 using System.Data.SqlClient;
+using Financeiro.Data.Infra;
 using System;
 
 namespace Financeiro.Data.Repositories
